@@ -19,7 +19,7 @@ public class ButtonScene : MonoBehaviour
         myButton.onClick.AddListener(ChangueScene);
     }
 
-    void ChangueScene()
+    public void ChangueScene()
     {
         SceneManager.LoadScene(scene);
         Time.timeScale = 1.0f;

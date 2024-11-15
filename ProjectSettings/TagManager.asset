@@ -10,6 +10,7 @@ TagManager:
   - maskable
   - humo
   - mina
+  - mostruo
   layers:
   - Default
   - TransparentFX

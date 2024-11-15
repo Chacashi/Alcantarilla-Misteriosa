@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class playerController : MonoBehaviour
 {
@@ -41,7 +42,7 @@ public class playerController : MonoBehaviour
     public static event Action OnFillingSlider;
     public static event Action OnPlayerDeath;
     public static event Action OnStepExplosive;
-
+    [SerializeField] private AudioSource jumpSound;
     private void Awake()
     {
         _compRigidbody2D = GetComponent<Rigidbody2D>();
@@ -100,12 +101,22 @@ public class playerController : MonoBehaviour
     {
        
         _compRigidbody2D.velocity = new Vector2(horizontal *speed, _compRigidbody2D.velocity.y);
+        if (horizontal > 0)
+        {
+            _compSpriteRenderer.flipX = false; 
+        }
+        else if (horizontal < 0)
+        {
+            _compSpriteRenderer.flipX = true; 
+        }
+
         CheckRaycast();
         if (isJump)
         {
             if (canJump)
             {
                 _compRigidbody2D.AddForce(new Vector2 (0,forceJump),ForceMode2D.Impulse);
+                jumpSound.Play();
                 isJump = false; 
             }
         }
@@ -170,7 +181,6 @@ public class playerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-       
 
         if( collision.gameObject.tag == "maskable")
         {
@@ -186,10 +196,20 @@ public class playerController : MonoBehaviour
 
         if(collision.gameObject.tag == "mina")
         {
-            OnStepExplosive?.Invoke();
-                
-            DesactiveInput();
-            
+            Destroy(collision.gameObject);
+            if (sliderLife.value > 0)
+            {
+                sliderLife.value -= damageHumo; 
+            }
+            if (sliderLife.value <= 0)
+            {
+                OnPlayerDeath?.Invoke();
+                gameObject.SetActive(false);
+            }
+        }
+        if (collision.gameObject.tag == "mostruo")
+        {
+            SceneManager.LoadScene("Victory");
         }
     }
 

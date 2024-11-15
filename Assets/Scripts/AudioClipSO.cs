@@ -9,7 +9,6 @@ public class AudioClipSO : ScriptableObject
     [SerializeField] private AudioMixerSO mixerSO;
     [Range(0, 1), SerializeField] private float volume = 1f;
     [Range(-3, 3), SerializeField] private float pitch = 1f;
-
     public AudioClip AudioClip
     {
         get { return audioClip; }
