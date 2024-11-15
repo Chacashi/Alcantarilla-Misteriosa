@@ -8,6 +8,8 @@ using UnityEngine.SceneManagement;
 
 public class playerController : MonoBehaviour
 {
+    Animator _compAnimator;
+    bool hasMask = false;
     [SerializeField] float speed;
     [SerializeField] Vector2 PositionInitial;
     Rigidbody2D _compRigidbody2D;
@@ -49,6 +51,7 @@ public class playerController : MonoBehaviour
         _compRigidbody2D = GetComponent<Rigidbody2D>();
         _compSpriteRenderer = GetComponent<SpriteRenderer>();
         input = GetComponent<PlayerInput>();
+        _compAnimator = GetComponent<Animator>();
     }
     private void Start()
     {
@@ -100,28 +103,29 @@ public class playerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-       
-        _compRigidbody2D.velocity = new Vector2(horizontal *speed, _compRigidbody2D.velocity.y);
+
+        _compRigidbody2D.velocity = new Vector2(horizontal * speed, _compRigidbody2D.velocity.y);
+
         if (horizontal > 0)
         {
-            _compSpriteRenderer.flipX = false; 
+            _compSpriteRenderer.flipX = false;
         }
         else if (horizontal < 0)
         {
-            _compSpriteRenderer.flipX = true; 
+            _compSpriteRenderer.flipX = true;
         }
+        _compAnimator.SetBool("move", Mathf.Abs(horizontal) > 0.01f);
 
         CheckRaycast();
         if (isJump)
         {
             if (canJump)
             {
-                _compRigidbody2D.AddForce(new Vector2 (0,forceJump),ForceMode2D.Impulse);
+                _compRigidbody2D.AddForce(new Vector2(0, forceJump), ForceMode2D.Impulse);
                 jumpSound.Play();
-                isJump = false; 
+                isJump = false;
             }
         }
-
     }
     private void CheckRaycast()
     {
@@ -174,6 +178,8 @@ public class playerController : MonoBehaviour
         {
             Destroy(collision.gameObject);
             SetNewSprite(spriteMaskable);
+            hasMask = true;               
+            _compAnimator.SetBool("hasMask", hasMask);
             isInvunerability = true;
         }
         if( collision.gameObject.tag == "humo" && isInvunerability ==false)
