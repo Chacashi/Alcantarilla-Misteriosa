@@ -10,7 +10,6 @@ public class PuzzlesManagerController : MonoBehaviour
     [SerializeField] int maxValueSlider;
     [SerializeField] int ObjectiveValue;
     [SerializeField] float addValue;
-    [SerializeField] GameObject simonObject;
     public static event Action<bool> OnCompleteSliderDoor;
 
 
@@ -32,7 +31,7 @@ public class PuzzlesManagerController : MonoBehaviour
         playerController.OnCollisionDoor += ShowSlider;
         playerController.OnCollisionDoorExit += HideSlider;
         playerController.OnFillingSlider += AddValue;
-        playerController.OnStepExplosive += ActiveSimon;
+
     }
 
     private void OnDisable()
@@ -40,7 +39,7 @@ public class PuzzlesManagerController : MonoBehaviour
         playerController.OnCollisionDoor -= ShowSlider;
         playerController.OnCollisionDoorExit -= HideSlider;
         playerController.OnFillingSlider -= AddValue;   
-        playerController.OnStepExplosive -= ActiveSimon;
+        
     }
     void AddValue()
     {
@@ -73,8 +72,5 @@ public class PuzzlesManagerController : MonoBehaviour
             OnCompleteSliderDoor?.Invoke(true);
         }
     }
-    void ActiveSimon()
-    {
-        simonObject.SetActive(true);
-    }
+
 }

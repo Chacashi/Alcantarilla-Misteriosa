@@ -22,7 +22,8 @@ public class playerController : MonoBehaviour
     [SerializeField] float ImpactIntensityVertical;
     [SerializeField] Sprite spriteMaskable;
     [SerializeField] float damageHumo;
-    IEnumerator coroutineDamage;
+    [SerializeField] float damageMine;
+    [SerializeField] float damageMouse;
     PlayerInput input;
     SpriteRenderer _compSpriteRenderer;
     RaycastHit2D hit;
@@ -41,7 +42,7 @@ public class playerController : MonoBehaviour
     public static event Action OnCollisionDoorExit;
     public static event Action OnFillingSlider;
     public static event Action OnPlayerDeath;
-    public static event Action OnStepExplosive;
+  
     [SerializeField] private AudioSource jumpSound;
     private void Awake()
     {
@@ -155,19 +156,6 @@ public class playerController : MonoBehaviour
             aux = collision.gameObject;
             OnCollisionDoor?.Invoke();
         }
-
-        if (collision.gameObject.tag == "block")
-        {
-            _compRigidbody2D.AddForce(Vector2.left * ImpactIntensityHorizontal);
-            // _compRigidbody2D.AddForce(Vector2.down * ImpactIntensityVertical);
-
-        }
-
-        if (collision.gameObject.tag == "mouse")
-        {
-            _compRigidbody2D.AddForce(Vector2.right * ImpactIntensityHorizontal);
-            _compRigidbody2D.AddForce(Vector2.up * ImpactIntensityVertical);
-        }
     }
     private void OnCollisionExit2D(Collision2D collision)
     {
@@ -190,26 +178,24 @@ public class playerController : MonoBehaviour
         }
         if( collision.gameObject.tag == "humo" && isInvunerability ==false)
         {
-            coroutineDamage = GetDamageProgresive(damageHumo);
-            StartCoroutine(coroutineDamage);
+      
+            StartCoroutine("GetDamageProgresive");
         }
 
         if(collision.gameObject.tag == "mina")
         {
             Destroy(collision.gameObject);
-            if (sliderLife.value > 0)
-            {
-                sliderLife.value -= damageHumo; 
-            }
-            if (sliderLife.value <= 0)
-            {
-                OnPlayerDeath?.Invoke();
-                gameObject.SetActive(false);
-            }
+            GetDamage(damageMine);
         }
         if (collision.gameObject.tag == "mostruo")
         {
             SceneManager.LoadScene("Victory");
+        }
+
+        if (collision.gameObject.tag == "mouse")
+        {
+            Destroy(collision.gameObject);
+            GetDamage(damageMouse);
         }
     }
 
@@ -219,28 +205,18 @@ public class playerController : MonoBehaviour
         if (collision.gameObject.tag == "humo" && isInvunerability == false)
         {
 
-            StopCoroutine(coroutineDamage);
+            StopCoroutine("GetDamageProgresive");
            
         }
     }
 
 
-    IEnumerator GetDamageProgresive(float damage)
+    IEnumerator GetDamageProgresive()
     {
-        while (true)
+        while (sliderLife.value <= 0)
         {
-            if (sliderLife.value > 0)
-            {
-                sliderLife.value -= damage;
-                yield return new WaitForSeconds(0.5f);
-
-            }
-            if (sliderLife.value <= 0)
-            {
-                OnPlayerDeath?.Invoke();
-                gameObject.SetActive(false);    
-                break;
-            }
+            GetDamage(damageHumo);
+            yield return new WaitForSeconds(0.5f);
         }
         
         
@@ -261,16 +237,21 @@ void CheckCompleteSliderDoor(bool auxBool)
         _compSpriteRenderer.sprite = sprite;
     }
 
-
-    void DesactiveInput()
+    void GetDamage(float damage)
     {
-        input.enabled = false;
-    }
+        if (sliderLife.value > 0)
+        {
+            sliderLife.value -= damage;
 
-    void ActiveInput()
-    {
-        input.enabled  = true;
+
+        }
+        if (sliderLife.value <= 0)
+        {
+            OnPlayerDeath?.Invoke();
+            gameObject.SetActive(false);
+        }
     }
+ 
 }
 
 

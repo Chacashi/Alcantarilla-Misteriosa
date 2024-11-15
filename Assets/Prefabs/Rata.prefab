@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2351995105771983627}
   - component: {fileID: -6926892256668695474}
   - component: {fileID: 5807216903887686415}
+  - component: {fileID: 8947361010451556871}
   m_Layer: 0
   m_Name: Rata
   m_TagString: mouse
@@ -77,7 +78,7 @@ SpriteRenderer:
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 59df52ec685ae2f46aadf8af5b2c5091, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
+  m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 5.62, y: 4.44}
@@ -115,7 +116,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -0.53, y: 1.05}
@@ -157,4 +158,23 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 7
+  m_Constraints: 6
+--- !u!114 &8947361010451556871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3731183115734002893}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cb6817854f41554dbb41f5df6a1f424, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 0
+  groundController: {fileID: 0}
+  movementRigth: 0
+  rayDistance: 0
+  floor:
+    serializedVersion: 2
+    m_Bits: 0
