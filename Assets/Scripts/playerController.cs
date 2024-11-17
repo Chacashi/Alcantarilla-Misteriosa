@@ -190,8 +190,9 @@ public class playerController : MonoBehaviour
 
         if(collision.gameObject.tag == "mina")
         {
-            Destroy(collision.gameObject);
+            
             GetDamage(damageMine);
+            Destroy(collision.gameObject);
         }
         if (collision.gameObject.tag == "mostruo")
         {
@@ -219,7 +220,7 @@ public class playerController : MonoBehaviour
 
     IEnumerator GetDamageProgresive()
     {
-        while (sliderLife.value <= 0)
+        while (sliderLife.value > 0)
         {
             GetDamage(damageHumo);
             yield return new WaitForSeconds(0.5f);
